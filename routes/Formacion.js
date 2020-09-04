@@ -81,10 +81,38 @@ app.post('/buscar', (req, res) => {
     Promise.all([
         buscarLogin(busqueda, regex), //TODO Cris
         buscarHabilitador(busqueda, regex), //TODO Cris
-        buscarFormador(busquede, regex), //TODO John
-        buscarCompetencia(busqueda, regex) //TODO John
-    ])
-})
+        //   buscarFormador(busquede, regex), //TODO John
+        //   buscarCompetencia(busqueda, regex) //TODO John
+    ]).then(respuestas => {
+        res.status(200).json({
+            ok: true,
+            login: respuestas[0],
+            habilitadores: respuestas[1],
+            //        formador: respuestas[2],
+            //       competencias: respuestas[3],
+            mensaje: 'Petición realizada correctamente'
+        });
+    })
+
+});
+
+function buscarLogin(login, regex) {
+    return new Promise((resolve, reject) => {
+        Formacion.find({ login: regex }, (err, formaciones) => {
+            if (err) reject(formaciones);
+            resolve(formaciones);
+        })
+    })
+}
+
+function buscarHabilitador(habilitador, regex) {
+    return new Promise((resolve, reject) => {
+        Formacion.find({ habilitadores: regex }, (err, formaciones) => {
+            if (err) reject(formaciones);
+            resolve(formaciones);
+        })
+    })
+}
 
 
 /* function buscarHospitales(busqueda, regex) {
