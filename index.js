@@ -27,12 +27,19 @@ app.use('/profesores', profesorRoutes);
 
 //conexión a BD
 
-mongoose.connection.openUri(llaves.configuración,
-    (err, res) => {
-        
-        if (err) throw err;
-            console.log('BD corriendo: \x1b[32m%s\x1b[0m', 'online') 
+
+try {
+    mongoose.connection.openUri(llaves.configuración,
+        (err, res) => {
+            
+            if (err) throw err;
+                console.log('BD corriendo: \x1b[32m%s\x1b[0m', 'online') 
     })
+} catch (error) {
+    console.log("i did not it");
+    console.log(err);
+}
+
 
 //Peticiones    
  app.listen(3000, ()=> { console.log('Express server corriendo en puerto 3000: \x1b[32m%s\x1b[0m', 'online');})
