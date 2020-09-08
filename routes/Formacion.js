@@ -3,6 +3,7 @@ var app = express();
 
 var Formacion = require('../models/Formacion');
 const { route } = require('./Usuario');
+const { Promise } = require('mongoose');
 
 
 
@@ -81,15 +82,15 @@ app.post('/buscar', (req, res) => {
     Promise.all([
         buscarLogin(busqueda, regex), //TODO Cris
         buscarHabilitador(busqueda, regex), //TODO Cris
-        //   buscarFormador(busquede, regex), //TODO John
-        //   buscarCompetencia(busqueda, regex) //TODO John
+        buscarFormador(busquede, regex), //TODO John
+        buscarCompetencia(busqueda, regex) //TODO John
     ]).then(respuestas => {
         res.status(200).json({
             ok: true,
             login: respuestas[0],
             habilitadores: respuestas[1],
-            //        formador: respuestas[2],
-            //       competencias: respuestas[3],
+            formador: respuestas[2],
+            competencias: respuestas[3],
             mensaje: 'Petición realizada correctamente'
         });
     })
@@ -112,6 +113,28 @@ function buscarHabilitador(habilitador, regex) {
             resolve(formaciones);
         })
     })
+}
+
+function buscarFormador(formador, regex){
+    return new Promise ((resolve, reject) =>{
+        Formacion.find({formador:regex},(err,formaciones) =>{
+            if(err) reject(formaciones);
+            resolve(formaciones);   
+
+        })
+    })
+
+}
+
+function buscarCompetencia(competencia, regex){
+    return new Promise ((resolve, reject) =>{
+        Formacion.find({competencias:regex},(err,formaciones) =>{
+            if(err) reject(formaciones);
+            resolve(formaciones);   
+
+        })
+    })
+
 }
 
 
